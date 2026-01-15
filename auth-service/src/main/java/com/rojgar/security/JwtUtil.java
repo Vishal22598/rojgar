@@ -24,6 +24,7 @@ public class JwtUtil {
 	public String generateToken(String username, String role) {
 		return Jwts.builder()
 				.setSubject(username)
+				.claim("role", role)
 				.setIssuedAt(new Date())
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
 				.signWith(getSignKey(), SignatureAlgorithm.HS256)
@@ -40,6 +41,10 @@ public class JwtUtil {
 	
 	public String extractUsername(String token) {
 		return extractClaims(token).getSubject();
+	}
+	
+	public String extractRole(String token) {
+	    return extractClaims(token).get("role", String.class);
 	}
 	
 	public boolean isTokenValid(String token) {
