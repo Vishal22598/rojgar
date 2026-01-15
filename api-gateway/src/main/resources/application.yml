@@ -29,9 +29,9 @@ spring:
              - Path=/jobs/**
 
           - id: application-service
-            uri: lb://applicaion-service
-            predicates:
-              -Path=/applicatioins/**
+            uri: lb://application-service
+            predicates: 
+             - Path=/applications/**
 eureka:
   client:
     service-url:
