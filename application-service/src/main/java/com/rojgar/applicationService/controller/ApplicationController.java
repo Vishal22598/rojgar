@@ -2,6 +2,7 @@ package com.rojgar.applicationService.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/applications")
 @RequiredArgsConstructor
 public class ApplicationController {
-	
-	private final RestTemplate restTemplate;
+//	@Autowired
+//	private final RestTemplate restTemplate;
 	private final ApplicationService service;
 	
 	//JOB_SEEKER
@@ -45,10 +46,11 @@ public class ApplicationController {
 				"You applied for Job Id: " + jobId
 		);
 		
-		restTemplate.postForObject(
-				"http://NOTIFICATION-SERVICE/notify", 
-				notification, 
-				Void.class);
+		service.sendNotification(notification);
+//		restTemplate.postForObject(
+//				"http://notification-service/notifications/email", 
+//				notification, 
+//				Void.class);
 		
 		return ResponseEntity.ok("Application Submitted");
 	}
