@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.rojgar.applicationService.dto.NotificationRequest;
 import com.rojgar.applicationService.entity.JobApplication;
 import com.rojgar.applicationService.service.ApplicationService;
 
@@ -21,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationController {
 	
+	private final RestTemplate restTemplate;
 	private final ApplicationService service;
 	
 	//JOB_SEEKER
@@ -34,7 +37,20 @@ public class ApplicationController {
 					.body("Only job seeker can apply");
 		}
 		
-		return ResponseEntity.ok(service.applyForJob(jobId, email));
+		service.applyForJob(jobId, email);
+		
+		NotificationRequest notification = new NotificationRequest(
+				email,
+				"Job Application Submitted",
+				"You applied for Job Id: " + jobId
+		);
+		
+		restTemplate.postForObject(
+				"http://NOTIFICATION-SERVICE/notify", 
+				notification, 
+				Void.class);
+		
+		return ResponseEntity.ok("Application Submitted");
 	}
 	
 	

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationService {
 	private final JobApplicationRepository repository;
 	
+	
 	public JobApplication applyForJob(Long jobId, String email) {
 		if(repository.existsByJobIdAndApplicationEmail(jobId, email)) {
 			throw new RuntimeException("Already applied for this job");
