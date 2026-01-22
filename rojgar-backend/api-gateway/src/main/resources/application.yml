@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+          routes:
+          - id: auth-service
+            uri: lb://auth-service
+            predicates:
+              - Path=/auth/**
+
+          - id: user-service
+            uri: lb://user-service
+            predicates: 
+             - Path=/users/**
+
+          - id: job-service
+            uri: lb://job-service
+            predicates: 
+             - Path=/jobs/**
+
+          - id: application-service
+            uri: lb://application-service
+            predicates: 
+             - Path=/applications/**
+
+          - id: notification-service
+            uri: lb://notification-service
+            predicates: 
+             - Path=/notifications/**
+
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowed-origins:
+                - "http://localhost:5173"
+                allowed-methods:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - OPTIONS
+                allowed-headers:
+                - "*"
+                allow-credentials: true
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
