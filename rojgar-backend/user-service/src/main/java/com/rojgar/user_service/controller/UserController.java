@@ -1,6 +1,9 @@
 package com.rojgar.user_service.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,16 @@ import com.rojgar.user_service.service.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	
+	@GetMapping("/me")
+	public ResponseEntity<?> getLoggedInUser(
+			@AuthenticationPrincipal Jwt jwt){
+		
+		String email = jwt.getClaim("sub");
+		User user = userService.getByEmail(email);
+		System.out.println("user: " + user);
+		return ResponseEntity.ok().body(user);
+	}
 	
 	@PostMapping
 	public User create(@RequestBody User userr) {

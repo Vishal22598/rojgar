@@ -15,7 +15,7 @@ function Dashboard() {
         try {
             const userRes = await api.get('/users/me');
             const jobsRes = await api.get('/jobs');
-            const appsRes = await api.get('/applications/my-applications');
+            const appsRes = await api.get('/applications/job/24');
 
             setUser(userRes.data);
             setJobCount(jobsRes.data.length);
